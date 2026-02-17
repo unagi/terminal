@@ -6,6 +6,7 @@
 #include "../../inc/consoletaeftemplates.hpp"
 #include "../../parser/OutputStateMachineEngine.hpp"
 #include "../../../renderer/inc/DummyRenderer.hpp"
+#include "../../../types/inc/CodepointWidthDetector.hpp"
 
 #include "adaptDispatch.hpp"
 
@@ -586,6 +587,42 @@ public:
 
         (_pDispatch->*moveFunc)(100);
         _testGetSet->ValidateExpectedCursorPos();
+    }
+
+    TEST_METHOD(BackspaceMovesAcrossWideGlyphBoundary)
+    {
+        auto& cwd = CodepointWidthDetector::Singleton();
+        const auto originalMode = cwd.GetMode();
+        const auto originalAmbiguousMode = cwd.GetAmbiguousWidthMode();
+        const auto restore = wil::scope_exit([&]() {
+            cwd.Reset(originalMode);
+            cwd.SetAmbiguousWidthMode(originalAmbiguousMode);
+        });
+
+        cwd.Reset(TextMeasurementMode::Graphemes);
+        cwd.SetAmbiguousWidthMode(AmbiguousWidthMode::Wide);
+
+        _testGetSet->PrepData(CursorX::LEFT, CursorY::TOP);
+        auto expected = _testGetSet->_expectedCursorPos;
+
+        _pDispatch->PrintString(L"あ→い");
+        expected.x = 6;
+        VERIFY_ARE_EQUAL(expected, _testGetSet->_textBuffer->GetCursor().GetPosition());
+
+        _pDispatch->Backspace();
+        expected.x = 4;
+        VERIFY_ARE_EQUAL(expected, _testGetSet->_textBuffer->GetCursor().GetPosition());
+
+        _pDispatch->Backspace();
+        expected.x = 2;
+        VERIFY_ARE_EQUAL(expected, _testGetSet->_textBuffer->GetCursor().GetPosition());
+
+        _pDispatch->Backspace();
+        expected.x = 0;
+        VERIFY_ARE_EQUAL(expected, _testGetSet->_textBuffer->GetCursor().GetPosition());
+
+        _pDispatch->Backspace();
+        VERIFY_ARE_EQUAL(expected, _testGetSet->_textBuffer->GetCursor().GetPosition());
     }
 
     TEST_METHOD(CursorPositionTest)

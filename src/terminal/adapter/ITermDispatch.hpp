@@ -41,7 +41,8 @@ public:
     virtual void CursorUp(const VTInt distance) = 0; // CUU
     virtual void CursorDown(const VTInt distance) = 0; // CUD
     virtual void CursorForward(const VTInt distance) = 0; // CUF
-    virtual void CursorBackward(const VTInt distance) = 0; // CUB, BS
+    virtual void CursorBackward(const VTInt distance) = 0; // CUB
+    virtual void Backspace() = 0; // BS
     virtual void CursorNextLine(const VTInt distance) = 0; // CNL
     virtual void CursorPrevLine(const VTInt distance) = 0; // CPL
     virtual void CursorHorizontalPositionAbsolute(const VTInt column) = 0; // HPA, CHA

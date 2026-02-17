@@ -1149,6 +1149,7 @@ public:
         _modeTypes{},
         _modeEnabled{ false },
         _warningBell{ false },
+        _backspace{ false },
         _carriageReturn{ false },
         _lineFeed{ false },
         _lineFeedType{ (DispatchTypes::LineFeedType)-1 },
@@ -1346,6 +1347,11 @@ public:
         _warningBell = true;
     }
 
+    void Backspace() noexcept override
+    {
+        _backspace = true;
+    }
+
     void CarriageReturn() noexcept override
     {
         _carriageReturn = true;
@@ -1479,6 +1485,7 @@ public:
     std::vector<DispatchTypes::ModeParams> _modeTypes;
     bool _modeEnabled;
     bool _warningBell;
+    bool _backspace;
     bool _carriageReturn;
     bool _lineFeed;
     DispatchTypes::LineFeedType _lineFeedType;
@@ -2607,8 +2614,7 @@ class StateMachineExternalTest final
         Log::Comment(L"BS (Back Space) control character");
         mach.ProcessCharacter(AsciiChars::BS);
 
-        VERIFY_IS_TRUE(pDispatch->_cursorBackward);
-        VERIFY_ARE_EQUAL(1u, pDispatch->_cursorDistance);
+        VERIFY_IS_TRUE(pDispatch->_backspace);
 
         pDispatch->ClearState();
 
