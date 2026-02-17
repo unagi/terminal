@@ -11,7 +11,7 @@
 #include <til/unicode.h>
 #include <Utils.h>
 
-#include "../../types/inc/CodepointWidthDetector.hpp"
+#include "../../types/inc/GlyphWidth.hpp"
 #include "../../types/inc/ColorFix.hpp"
 #include "../../types/inc/utils.hpp"
 #include "../TerminalSettingsAppAdapterLib/TerminalSettings.h"
@@ -58,33 +58,6 @@ namespace winrt
     namespace WUX = Windows::UI::Xaml;
     using IInspectable = Windows::Foundation::IInspectable;
     using VirtualKeyModifiers = Windows::System::VirtualKeyModifiers;
-}
-
-namespace
-{
-    [[nodiscard]] size_t _measureDisplayWidth(const std::wstring_view text)
-    {
-        size_t width = 0;
-        auto& widthDetector = CodepointWidthDetector::Singleton();
-        for (GraphemeState state{}; widthDetector.GraphemeNext(state, text);)
-        {
-            width += gsl::narrow_cast<size_t>(state.width);
-        }
-        return width;
-    }
-
-    [[nodiscard]] uint32_t _toDisplayWidthBackspaceCount(const winrt::hstring& currentCommandline, const uint32_t replacementLength)
-    {
-        const auto commandline = std::wstring_view{ currentCommandline };
-        const auto replacementLengthAsSizeT = gsl::narrow_cast<size_t>(replacementLength);
-        if (replacementLengthAsSizeT > commandline.size())
-        {
-            return replacementLength;
-        }
-
-        const auto replacementText = commandline.substr(commandline.size() - replacementLengthAsSizeT);
-        return gsl::narrow_cast<uint32_t>(_measureDisplayWidth(replacementText));
-    }
 }
 
 namespace clipboard
@@ -5237,7 +5210,8 @@ namespace winrt::TerminalApp::implementation
             {
                 if (const auto context = control.CommandHistory())
                 {
-                    replaceLength = _toDisplayWidthBackspaceCount(context.CurrentCommandline(), replaceLength);
+                    replaceLength = gsl::narrow_cast<uint32_t>(MeasureDisplayWidthForSuffix(std::wstring_view{ context.CurrentCommandline() },
+                                                                                             replaceLength));
                 }
             }
 

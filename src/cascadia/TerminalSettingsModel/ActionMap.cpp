@@ -6,7 +6,7 @@
 #include "ActionMap.h"
 #include "Command.h"
 #include <til/io.h>
-#include "../../types/inc/CodepointWidthDetector.hpp"
+#include "../../types/inc/GlyphWidth.hpp"
 
 #include "ActionMap.g.cpp"
 #include "ActionArgFactory.g.cpp"
@@ -17,20 +17,6 @@ using namespace winrt::Windows::Foundation::Collections;
 
 namespace winrt::Microsoft::Terminal::Settings::Model::implementation
 {
-    namespace
-    {
-        [[nodiscard]] size_t _measureDisplayWidth(const std::wstring_view text)
-        {
-            size_t width = 0;
-            auto& widthDetector = CodepointWidthDetector::Singleton();
-            for (GraphemeState state{}; widthDetector.GraphemeNext(state, text);)
-            {
-                width += gsl::narrow_cast<size_t>(state.width);
-            }
-            return width;
-        }
-    }
-
     static InternalActionID Hash(const Model::ActionAndArgs& actionAndArgs)
     {
         til::hasher hasher;
@@ -1302,7 +1288,7 @@ namespace winrt::Microsoft::Terminal::Settings::Model::implementation
         winrt::hstring currentCommandline,
         winrt::hstring currentWorkingDirectory)
     {
-        const auto numBackspaces = _measureDisplayWidth(currentCommandline);
+        const auto numBackspaces = MeasureDisplayWidth(currentCommandline);
 
         // enumerate all the parent directories we want to import snippets from
         std::filesystem::path directory{ std::wstring_view{ currentWorkingDirectory } };

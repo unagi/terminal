@@ -7,7 +7,7 @@
 
 #include <til/replace.h>
 #include <ScopedResourceLoader.h>
-#include "../../types/inc/CodepointWidthDetector.hpp"
+#include "../../types/inc/GlyphWidth.hpp"
 
 #include "KeyChordSerialization.h"
 
@@ -24,20 +24,6 @@ namespace winrt
 static constexpr std::string_view ProfileNameToken{ "${profile.name}" };
 static constexpr std::string_view ProfileIconToken{ "${profile.icon}" };
 static constexpr std::string_view SchemeNameToken{ "${scheme.name}" };
-
-namespace
-{
-    [[nodiscard]] size_t _measureDisplayWidth(const std::wstring_view text)
-    {
-        size_t width = 0;
-        auto& widthDetector = CodepointWidthDetector::Singleton();
-        for (GraphemeState state{}; widthDetector.GraphemeNext(state, text);)
-        {
-            width += gsl::narrow_cast<size_t>(state.width);
-        }
-        return width;
-    }
-}
 
 template<>
 struct Microsoft::Terminal::Settings::Model::JsonUtils::ConversionTrait<winrt::Microsoft::Terminal::Settings::Model::implementation::Command::CommandNameOrResource>
@@ -794,7 +780,7 @@ namespace winrt::Microsoft::Terminal::Settings::Model::implementation
         // Use this map to discard duplicates.
         std::unordered_map<std::wstring_view, bool> foundCommands{};
 
-        const auto backspaces = std::wstring(_measureDisplayWidth(currentCommandline), L'\x7f');
+        const auto backspaces = std::wstring(MeasureDisplayWidth(currentCommandline), L'\x7f');
 
         // Iterate in reverse over the history, so that most recent commands are first
         for (auto i = history.Size(); i > 0; i--)
