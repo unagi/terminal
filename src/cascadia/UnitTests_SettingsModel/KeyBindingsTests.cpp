@@ -6,6 +6,7 @@
 #include "../TerminalSettingsModel/ColorScheme.h"
 #include "../TerminalSettingsModel/CascadiaSettings.h"
 #include "../TerminalSettingsModel/ActionMap.h"
+#include "../../types/inc/CodepointWidthDetector.hpp"
 #include "JsonTestClass.h"
 #include "TestUtils.h"
 
@@ -39,6 +40,7 @@ namespace SettingsModelUnitTests
         TEST_METHOD(TestToggleCommandPaletteArgs);
         TEST_METHOD(TestMoveTabArgs);
         TEST_METHOD(TestGetKeyBindingForAction);
+        TEST_METHOD(FilterToSnippetsUsesDisplayWidthForBackspaces);
         TEST_METHOD(KeybindingsWithoutVkey);
     };
 
@@ -796,6 +798,48 @@ namespace SettingsModelUnitTests
 
         actionMap->LayerJson(bindings2Json, OriginTag::None);
         VERIFY_ARE_EQUAL(2u, actionMap->_KeyMap.size());
+    }
+
+    void KeyBindingsTests::FilterToSnippetsUsesDisplayWidthForBackspaces()
+    {
+        auto& widthDetector = CodepointWidthDetector::Singleton();
+        const auto prevMode = widthDetector.GetMode();
+        const auto prevAmbiguousWidthMode = widthDetector.GetAmbiguousWidthMode();
+        auto restore = wil::scope_exit([&]() {
+            widthDetector.Reset(prevMode);
+            widthDetector.SetAmbiguousWidthMode(prevAmbiguousWidthMode);
+        });
+
+        widthDetector.Reset(TextMeasurementMode::Graphemes);
+        widthDetector.SetAmbiguousWidthMode(AmbiguousWidthMode::Wide);
+
+        const auto actionMap = winrt::make_self<implementation::ActionMap>();
+        actionMap->AddSendInputAction(L"mySnippet", L"echo task", KeyChord{ VirtualKeyModifiers::Control, static_cast<int32_t>('J'), 0 });
+
+        const auto snippets = actionMap->FilterToSnippets(L"\u2192", L"").get();
+
+        bool foundSnippet = false;
+        for (const auto& snippet : snippets)
+        {
+            const auto args = snippet.ActionAndArgs().Args().try_as<SendInputArgs>();
+            if (!args)
+            {
+                continue;
+            }
+
+            const std::wstring input{ args.Input() };
+            if (!input.ends_with(L"echo task"))
+            {
+                continue;
+            }
+
+            foundSnippet = true;
+            const auto backspaceCount = std::count(input.begin(), input.end(), L'\x7f');
+            VERIFY_ARE_EQUAL(2u, backspaceCount);
+            break;
+        }
+
+        VERIFY_IS_TRUE(foundSnippet);
     }
 
     void KeyBindingsTests::KeybindingsWithoutVkey()
