@@ -44,8 +44,7 @@ namespace Microsoft::Console::VirtualTerminal
         void CursorUp(const VTInt distance) override; // CUU
         void CursorDown(const VTInt distance) override; // CUD
         void CursorForward(const VTInt distance) override; // CUF
-        void CursorBackward(const VTInt distance) override; // CUB
-        void Backspace() override; // BS
+        void CursorBackward(const VTInt distance) override; // CUB, BS
         void CursorNextLine(const VTInt distance) override; // CNL
         void CursorPrevLine(const VTInt distance) override; // CPL
         void CursorHorizontalPositionAbsolute(const VTInt column) override; // HPA, CHA

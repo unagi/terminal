@@ -242,38 +242,6 @@ void AdaptDispatch::CursorBackward(const VTInt distance)
 }
 
 // Routine Description:
-// - BS - Moves the cursor to the previous glyph boundary.
-//   Unlike CUB, this follows grapheme/DBCS cell boundaries.
-void AdaptDispatch::Backspace()
-{
-    const auto page = _pages.ActivePage();
-    auto& cursor = page.Cursor();
-    const auto cursorPosition = cursor.GetPosition();
-    const auto [topMargin, bottomMargin] = _GetVerticalMargins(page, true);
-    const auto [leftMargin, rightMargin] = _GetHorizontalMargins(page.Width());
-
-    auto col = cursorPosition.x;
-    if (col > 0)
-    {
-        col = page.Buffer().GetRowByOffset(cursorPosition.y).NavigateToPrevious(col);
-    }
-
-    if (cursorPosition.y >= topMargin && cursorPosition.y <= bottomMargin)
-    {
-        if (cursorPosition.x >= leftMargin)
-        {
-            col = std::max(col, leftMargin);
-        }
-        if (cursorPosition.x <= rightMargin)
-        {
-            col = std::min(col, rightMargin);
-        }
-    }
-
-    cursor.SetPosition(page.Buffer().ClampPositionWithinLine({ col, cursorPosition.y }));
-}
-
-// Routine Description:
 // - CNL - Handles cursor movement to the following line (or N lines down)
 // - Moves to the beginning X/Column position of the line.
 // Arguments:

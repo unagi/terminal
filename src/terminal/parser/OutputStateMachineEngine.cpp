@@ -57,7 +57,7 @@ bool OutputStateMachineEngine::ActionExecute(const wchar_t wch)
         _dispatch->WarningBell();
         break;
     case AsciiChars::BS:
-        _dispatch->Backspace();
+        _dispatch->CursorBackward(1);
         break;
     case AsciiChars::TAB:
         _dispatch->ForwardTab(1);
