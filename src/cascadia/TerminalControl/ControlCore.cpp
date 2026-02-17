@@ -71,7 +71,7 @@ namespace winrt::Microsoft::Terminal::Control::implementation
         _desiredFont{ DEFAULT_FONT_FACE, 0, DEFAULT_FONT_WEIGHT, DEFAULT_FONT_SIZE, CP_UTF8 },
         _actualFont{ DEFAULT_FONT_FACE, 0, DEFAULT_FONT_WEIGHT, { 0, DEFAULT_FONT_SIZE }, CP_UTF8, false }
     {
-        static const auto textMeasurementInit = [&]() {
+        const auto textMeasurementInit = [&]() {
             TextMeasurementMode mode = TextMeasurementMode::Graphemes;
             switch (settings.TextMeasurement())
             {
@@ -101,6 +101,7 @@ namespace winrt::Microsoft::Terminal::Control::implementation
             CodepointWidthDetector::Singleton().SetAmbiguousWidthMode(ambiguousWidth);
             return true;
         }();
+        (void)textMeasurementInit;
 
         _settings = settings;
         _hasUnfocusedAppearance = static_cast<bool>(unfocusedAppearance);
