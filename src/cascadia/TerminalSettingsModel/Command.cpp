@@ -780,7 +780,7 @@ namespace winrt::Microsoft::Terminal::Settings::Model::implementation
         // Use this map to discard duplicates.
         std::unordered_map<std::wstring_view, bool> foundCommands{};
 
-        const auto backspaces = std::wstring(MeasureDisplayWidth(currentCommandline), L'\x7f');
+        const auto backspaces = std::wstring(BackspaceCountForCommandline(currentCommandline), L'\x7f');
 
         // Iterate in reverse over the history, so that most recent commands are first
         for (auto i = history.Size(); i > 0; i--)

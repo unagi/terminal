@@ -1288,7 +1288,7 @@ namespace winrt::Microsoft::Terminal::Settings::Model::implementation
         winrt::hstring currentCommandline,
         winrt::hstring currentWorkingDirectory)
     {
-        const auto numBackspaces = MeasureDisplayWidth(currentCommandline);
+        const auto numBackspaces = BackspaceCountForCommandline(currentCommandline);
 
         // enumerate all the parent directories we want to import snippets from
         std::filesystem::path directory{ std::wstring_view{ currentWorkingDirectory } };

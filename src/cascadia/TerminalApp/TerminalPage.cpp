@@ -5210,8 +5210,8 @@ namespace winrt::TerminalApp::implementation
             {
                 if (const auto context = control.CommandHistory())
                 {
-                    replaceLength = gsl::narrow_cast<uint32_t>(MeasureDisplayWidthForSuffix(std::wstring_view{ context.CurrentCommandline() },
-                                                                                             replaceLength));
+                    replaceLength = gsl::narrow_cast<uint32_t>(BackspaceCountForCommandline(std::wstring_view{ context.CurrentCommandline() },
+                                                                                              replaceLength));
                 }
             }
 

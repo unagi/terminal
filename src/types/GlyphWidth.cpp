@@ -43,3 +43,13 @@ size_t MeasureDisplayWidthForSuffix(const std::wstring_view& text, const size_t 
 
     return MeasureDisplayWidth(text.substr(text.size() - suffixLength));
 }
+
+size_t BackspaceCountForCommandline(const std::wstring_view& commandline) noexcept
+{
+    return MeasureDisplayWidth(commandline);
+}
+
+size_t BackspaceCountForCommandline(const std::wstring_view& commandline, const size_t replacementLength) noexcept
+{
+    return MeasureDisplayWidthForSuffix(commandline, replacementLength);
+}
