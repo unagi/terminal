@@ -63,32 +63,6 @@ namespace winrt::Microsoft::Terminal::TerminalConnection::implementation
             // The profile Guid does include the enclosing '{}'
             environment.as_map().insert_or_assign(L"WT_PROFILE_ID", Utils::GuidToString(_profileGuid));
 
-            // Expose width policy to child processes so they can align their own width calculations.
-            const auto textMeasurement = [&]() -> std::wstring_view {
-                switch (_flags & PSEUDOCONSOLE_GLYPH_WIDTH__MASK)
-                {
-                case PSEUDOCONSOLE_GLYPH_WIDTH_WCSWIDTH:
-                    return L"wcswidth";
-                case PSEUDOCONSOLE_GLYPH_WIDTH_CONSOLE:
-                    return L"console";
-                case PSEUDOCONSOLE_GLYPH_WIDTH_GRAPHEMES:
-                default:
-                    return L"graphemes";
-                }
-            }();
-            const auto ambiguousWidth = [&]() -> std::wstring_view {
-                switch (_flags & PSEUDOCONSOLE_AMBIGUOUS_WIDTH__MASK)
-                {
-                case PSEUDOCONSOLE_AMBIGUOUS_WIDTH_WIDE:
-                    return L"wide";
-                case PSEUDOCONSOLE_AMBIGUOUS_WIDTH_NARROW:
-                default:
-                    return L"narrow";
-                }
-            }();
-            environment.as_map().insert_or_assign(L"WT_TEXT_MEASUREMENT", std::wstring{ textMeasurement });
-            environment.as_map().insert_or_assign(L"WT_AMBIGUOUS_WIDTH", std::wstring{ ambiguousWidth });
-
             // WSLENV is a colon-delimited list of environment variables (+flags) that should appear inside WSL
             // https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows/
 
@@ -114,8 +88,6 @@ namespace winrt::Microsoft::Terminal::TerminalConnection::implementation
             static constexpr std::wstring_view builtinWslEnvVars[] = {
                 L"WT_SESSION",
                 L"WT_PROFILE_ID",
-                L"WT_TEXT_MEASUREMENT",
-                L"WT_AMBIGUOUS_WIDTH",
             };
             // Misdiagnosis in MSVC 14.44.35207. No pointer arithmetic in sight.
 #pragma warning(suppress : 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
