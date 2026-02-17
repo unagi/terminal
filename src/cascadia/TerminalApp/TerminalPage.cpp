@@ -1470,7 +1470,7 @@ namespace winrt::TerminalApp::implementation
                                                                                         IControlSettings settings,
                                                                                         const bool inheritCursor)
     {
-        static const auto textMeasurement = [&]() -> std::wstring_view {
+        const auto textMeasurement = [&]() -> std::wstring_view {
             switch (_settings.GlobalSettings().TextMeasurement())
             {
             case TextMeasurement::Graphemes:
@@ -1483,8 +1483,8 @@ namespace winrt::TerminalApp::implementation
                 return {};
             }
         }();
-        static const auto ambiguousWidth = [&]() -> std::wstring_view {
-            switch (_settings.GlobalSettings().AmbiguousWidth())
+        const auto ambiguousWidth = [&]() -> std::wstring_view {
+            switch (settings.AmbiguousWidth())
             {
             case AmbiguousWidth::Narrow:
                 return L"narrow";

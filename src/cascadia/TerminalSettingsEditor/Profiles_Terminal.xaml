@@ -17,6 +17,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="CommonResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="EnumComboBoxTemplate"
+                          x:DataType="local:EnumEntry">
+                <TextBlock Text="{x:Bind EnumName, Mode=OneWay}" />
+            </DataTemplate>
         </ResourceDictionary>
     </Page.Resources>
 
@@ -38,6 +43,18 @@
                                     SettingOverrideSource="{x:Bind Profile.SuppressApplicationTitleOverrideSource, Mode=OneWay}">
                 <ToggleSwitch IsOn="{x:Bind Profile.SuppressApplicationTitle, Mode=TwoWay}"
                               Style="{StaticResource ToggleSwitchInExpanderStyle}" />
+            </local:SettingContainer>
+
+            <!--  Ambiguous Width  -->
+            <local:SettingContainer x:Uid="Globals_AmbiguousWidth"
+                                    ClearSettingValue="{x:Bind Profile.ClearAmbiguousWidth}"
+                                    HasSettingValue="{x:Bind Profile.HasAmbiguousWidth, Mode=OneWay}"
+                                    SettingOverrideSource="{x:Bind Profile.AmbiguousWidthOverrideSource, Mode=OneWay}">
+                <ComboBox AutomationProperties.AccessibilityView="Content"
+                          ItemTemplate="{StaticResource EnumComboBoxTemplate}"
+                          ItemsSource="{x:Bind Profile.AmbiguousWidthList, Mode=OneWay}"
+                          SelectedItem="{x:Bind Profile.CurrentAmbiguousWidth, Mode=TwoWay}"
+                          Style="{StaticResource ComboBoxSettingStyle}" />
             </local:SettingContainer>
 
             <!--  Force VT Input  -->

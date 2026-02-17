@@ -24,6 +24,7 @@ static constexpr std::string_view DefaultProfileKey{ "defaultProfile" };
 static constexpr std::string_view FirstWindowPreferenceKey{ "firstWindowPreference" };
 static constexpr std::string_view LegacyUseTabSwitcherModeKey{ "useTabSwitcher" };
 static constexpr std::string_view LegacyReloadEnvironmentVariablesKey{ "compatibility.reloadEnvironmentVariables" };
+static constexpr std::string_view LegacyAmbiguousWidthKey{ "compatibility.ambiguousWidth" };
 static constexpr std::string_view LegacyForceVTInputKey{ "experimental.input.forceVT" };
 static constexpr std::string_view LegacyInputServiceWarningKey{ "inputServiceWarning" };
 static constexpr std::string_view LegacyWarnAboutLargePasteKey{ "largePasteWarning" };
@@ -196,6 +197,12 @@ void GlobalAppSettings::LayerJson(const Json::Value& json, const OriginTag origi
         _logSettingSet(LegacyForceVTInputKey);
     }
 
+    _fixupsAppliedDuringLoad = JsonUtils::GetValueForKey(json, LegacyAmbiguousWidthKey, _legacyAmbiguousWidth) || _fixupsAppliedDuringLoad;
+    if (json[LegacyAmbiguousWidthKey.data()])
+    {
+        _logSettingSet(LegacyAmbiguousWidthKey);
+    }
+
     // GLOBAL_SETTINGS_LAYER_JSON above should have already loaded this value properly.
     // We just need to detect if the legacy value was used and mark it for fixup, if so.
     if (const auto firstWindowPreferenceValue = json[FirstWindowPreferenceKey.data()])
@@ -311,10 +318,6 @@ Json::Value GlobalAppSettings::ToJson()
     if (_TextMeasurement == Control::TextMeasurement::Graphemes)
     {
         _TextMeasurement.reset();
-    }
-    if (_AmbiguousWidth == Control::AmbiguousWidth::Narrow)
-    {
-        _AmbiguousWidth.reset();
     }
     if (_DefaultInputScope == Control::DefaultInputScope::Default)
     {

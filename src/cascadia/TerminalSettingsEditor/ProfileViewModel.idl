@@ -58,6 +58,9 @@ namespace Microsoft.Terminal.Settings.Editor
         IInspectable CurrentAntiAliasingMode;
         Windows.Foundation.Collections.IObservableVector<Microsoft.Terminal.Settings.Editor.EnumEntry> AntiAliasingModeList { get; };
 
+        IInspectable CurrentAmbiguousWidth;
+        Windows.Foundation.Collections.IObservableVector<Microsoft.Terminal.Settings.Editor.EnumEntry> AmbiguousWidthList { get; };
+
         IInspectable CurrentCloseOnExitMode;
         Windows.Foundation.Collections.IObservableVector<Microsoft.Terminal.Settings.Editor.EnumEntry> CloseOnExitModeList { get; };
 
@@ -122,6 +125,7 @@ namespace Microsoft.Terminal.Settings.Editor
         OBSERVABLE_PROJECTED_PROFILE_SETTING(String, Commandline);
         OBSERVABLE_PROJECTED_PROFILE_SETTING(String, StartingDirectory);
         OBSERVABLE_PROJECTED_PROFILE_SETTING(Microsoft.Terminal.Control.TextAntialiasingMode, AntialiasingMode);
+        OBSERVABLE_PROJECTED_PROFILE_SETTING(Microsoft.Terminal.Control.AmbiguousWidth, AmbiguousWidth);
         OBSERVABLE_PROJECTED_PROFILE_SETTING(Int32, HistorySize);
         OBSERVABLE_PROJECTED_PROFILE_SETTING(Boolean, SnapOnInput);
         OBSERVABLE_PROJECTED_PROFILE_SETTING(Boolean, AltGrAliasing);

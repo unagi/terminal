@@ -30,7 +30,6 @@ Author(s):
     X(bool, DisablePartialInvalidation, "rendering.disablePartialInvalidation", false)                                                                                                                \
     X(bool, SoftwareRendering, "rendering.software", false)                                                                                                                                           \
     X(winrt::Microsoft::Terminal::Control::TextMeasurement, TextMeasurement, "compatibility.textMeasurement")                                                                                         \
-    X(winrt::Microsoft::Terminal::Control::AmbiguousWidth, AmbiguousWidth, "compatibility.ambiguousWidth", winrt::Microsoft::Terminal::Control::AmbiguousWidth::Narrow)                             \
     X(winrt::Microsoft::Terminal::Control::DefaultInputScope, DefaultInputScope, "defaultInputScope")                                                                                                 \
     X(bool, UseBackgroundImageForWindow, "experimental.useBackgroundImageForWindow", false)                                                                                                           \
     X(bool, TrimBlockSelection, "trimBlockSelection", true)                                                                                                                                           \
@@ -87,6 +86,7 @@ Author(s):
     X(hstring, Commandline, "commandline", L"%SystemRoot%\\System32\\cmd.exe")                                                                                 \
     X(Microsoft::Terminal::Control::ScrollbarState, ScrollState, "scrollbarState", Microsoft::Terminal::Control::ScrollbarState::Visible)                      \
     X(Microsoft::Terminal::Control::TextAntialiasingMode, AntialiasingMode, "antialiasingMode", Microsoft::Terminal::Control::TextAntialiasingMode::Grayscale) \
+    X(winrt::Microsoft::Terminal::Control::AmbiguousWidth, AmbiguousWidth, "compatibility.ambiguousWidth", winrt::Microsoft::Terminal::Control::AmbiguousWidth::Narrow)                             \
     X(hstring, StartingDirectory, "startingDirectory")                                                                                                         \
     X(IMediaResource, Icon, "icon", implementation::MediaResource::FromString(L"\uE756"))                                                                      \
     X(bool, SuppressApplicationTitle, "suppressApplicationTitle", false)                                                                                       \

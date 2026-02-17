@@ -2407,14 +2407,6 @@
             "console"
           ]
         },
-        "compatibility.ambiguousWidth": {
-          "default": "narrow",
-          "description": "This controls the width used for East Asian Ambiguous characters.",
-          "enum": [
-            "narrow",
-            "wide"
-          ]
-        },
         "copyFormatting": {
           "default": true,
           "description": "When set to `true`, the color and font formatting of selected text is also copied to your clipboard. When set to `false`, only plain text is copied to your clipboard. An array of specific formats can also be used. Supported array values include `html` and `rtf`. Plain text is always copied.",
@@ -2758,6 +2750,14 @@
           "default": true,
           "description": "When set to true, when opening a new tab or pane it will get reloaded environment variables.",
           "type": "boolean"
+        },
+        "compatibility.ambiguousWidth": {
+          "default": "narrow",
+          "description": "This controls the width used for East Asian Ambiguous characters.",
+          "enum": [
+            "narrow",
+            "wide"
+          ]
         },
         "compatibility.input.forceVT": {
           "default": false,

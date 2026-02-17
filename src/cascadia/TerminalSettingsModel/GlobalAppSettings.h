@@ -73,6 +73,7 @@ namespace winrt::Microsoft::Terminal::Settings::Model::implementation
 
         bool LegacyReloadEnvironmentVariables() const noexcept { return _legacyReloadEnvironmentVariables; }
         bool LegacyForceVTInput() const noexcept { return _legacyForceVTInput; }
+        std::optional<winrt::Microsoft::Terminal::Control::AmbiguousWidth> LegacyAmbiguousWidth() const noexcept { return _legacyAmbiguousWidth; }
 
         void LogSettingChanges(std::set<std::string>& changes, const std::string_view& context) const;
 
@@ -98,6 +99,7 @@ namespace winrt::Microsoft::Terminal::Settings::Model::implementation
         bool _fixupsAppliedDuringLoad{ false };
         bool _legacyReloadEnvironmentVariables{ true };
         bool _legacyForceVTInput{ false };
+        std::optional<winrt::Microsoft::Terminal::Control::AmbiguousWidth> _legacyAmbiguousWidth{ std::nullopt };
         winrt::com_ptr<implementation::ActionMap> _actionMap{ winrt::make_self<implementation::ActionMap>() };
         std::set<std::string> _changeLog;
 

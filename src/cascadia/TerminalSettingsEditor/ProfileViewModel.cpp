@@ -37,6 +37,7 @@ namespace winrt::Microsoft::Terminal::Settings::Editor::implementation
         _dispatcher{ dispatcher }
     {
         INITIALIZE_BINDABLE_ENUM_SETTING(AntiAliasingMode, TextAntialiasingMode, winrt::Microsoft::Terminal::Control::TextAntialiasingMode, L"Profile_AntialiasingMode", L"Content");
+        INITIALIZE_BINDABLE_ENUM_SETTING(AmbiguousWidth, AmbiguousWidth, winrt::Microsoft::Terminal::Control::AmbiguousWidth, L"Globals_AmbiguousWidth_", L"Text");
         INITIALIZE_BINDABLE_ENUM_SETTING_REVERSE_ORDER(CloseOnExitMode, CloseOnExitMode, winrt::Microsoft::Terminal::Settings::Model::CloseOnExitMode, L"Profile_CloseOnExit", L"Content");
         INITIALIZE_BINDABLE_ENUM_SETTING(ScrollState, ScrollbarState, winrt::Microsoft::Terminal::Control::ScrollbarState, L"Profile_ScrollbarVisibility", L"Content");
         INITIALIZE_BINDABLE_ENUM_SETTING(PathTranslationStyle, PathTranslationStyle, winrt::Microsoft::Terminal::Control::PathTranslationStyle, L"Profile_PathTranslationStyle", L"Content");
@@ -62,6 +63,10 @@ namespace winrt::Microsoft::Terminal::Settings::Editor::implementation
             else if (viewModelProperty == L"AntialiasingMode")
             {
                 _NotifyChanges(L"CurrentAntiAliasingMode");
+            }
+            else if (viewModelProperty == L"AmbiguousWidth")
+            {
+                _NotifyChanges(L"CurrentAmbiguousWidth");
             }
             else if (viewModelProperty == L"CloseOnExit")
             {

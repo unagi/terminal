@@ -124,7 +124,6 @@ namespace SettingsModelUnitTests
                 "disableAnimations": false,
 
                 "trimPaste": true,
-                "compatibility.ambiguousWidth": "wide",
 
                 "warning.confirmCloseAllTabs" : true,
                 "warning.inputService" : true,
@@ -193,6 +192,7 @@ namespace SettingsModelUnitTests
                 "scrollbarState": "visible",
                 "snapOnInput": true,
                 "historySize": 9001,
+                "compatibility.ambiguousWidth": "wide",
 
                 "closeOnExit": "graceful",
                 "experimental.retroTerminalEffect": false,

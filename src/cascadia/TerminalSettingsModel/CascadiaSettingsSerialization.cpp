@@ -680,6 +680,17 @@ bool SettingsLoader::FixupUserSettings()
         fixedUp = true;
     }
 
+    // Migrate the global
+    // `compatibility.ambiguousWidth` to being a per-profile setting.
+    if (const auto legacyAmbiguousWidth = userSettings.globals->LegacyAmbiguousWidth())
+    {
+        if (!userSettings.baseLayerProfile->HasAmbiguousWidth())
+        {
+            userSettings.baseLayerProfile->AmbiguousWidth(*legacyAmbiguousWidth);
+        }
+        fixedUp = true;
+    }
+
     // Terminal 1.23: Migrate the global
     // `experimental.input.forceVT` to being a per-profile setting.
     if (userSettings.globals->LegacyForceVTInput())
